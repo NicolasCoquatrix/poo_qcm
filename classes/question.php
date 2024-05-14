@@ -6,7 +6,7 @@ Class Question {
 	private string $title;
     private array $answers;
     private array $rightAnswers;
-    private array $selectedAnswers;
+    private array $selectedAnswers = [];
 
 	public function __construct(string $title){
 		$this->setTitle($title);

@@ -44,14 +44,17 @@ Class MCQ {
 	}
 
     public function render(){
-		require 'templates/mcq.html.php';
+		if(empty($_POST)){
+			require 'templates/mcq.html.php';
+		} else {
+			require 'templates/result.html.php';
+		}
 	}
 
 	public function check(){
 		if(!empty($_POST)){
+			// var_dump($_POST);
 			foreach ($_POST as $indexQuestion => $Answers){
-				// var_dump($_POST);
-				// exit;
 				$question = $this->getQuestions()[$indexQuestion];
 				foreach ($Answers as $indexAnswer){
 					$question->setSelectedAnswers($question->getAnswers()[$indexAnswer]);

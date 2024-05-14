@@ -13,17 +13,18 @@
 <body>
     
     <div class="container my-4">
-        <div class="alert alert-secondary">
+        <div class="alert alert-<?= $this->getGrade() >= count($this->getQuestions()) / 2 ? 'success' : 'danger' ?>">
             <h1 class="mb-0 text-center"><?= $this->getTitle() ?></h1>
-            <p class="mb-0 text-center">Répondez au QCM.</p>
+            <p class="mb-0 text-center"><?= 'Note : '.$this->getGrade().' / '.count($this->getQuestions()) ?></p>
         </div>
 
-        <form class="d-flex flex-column gap-3" action="#" method="POST">
+        <section class="d-flex flex-column gap-3">
             <?php foreach ($this->getQuestions() as $indexQuestion => $question): ?>
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center gap-2">
                         <label class="h4" for="<?= $indexQuestion ?>"><?= $question->getTitle() ?></label>
+                        <p class="mb-0 <?= $question->getSelectedAnswers() === $question->getRightAnswers() ? 'text-success' : 'text-danger' ?>"><?= $question->getSelectedAnswers() === $question->getRightAnswers() ? 'Correct' : 'Incorrect' ?></p>
                     </div>
 
                     <p class="mb-0 small"><?= count($question->getRightAnswers()) > 1 ? 'Plusieurs réponses.' : 'Une seule réponse.' ?></p>
@@ -32,15 +33,19 @@
                 <div class="card-body d-flex flex-column gap-3">
                     <?php foreach ($question->getAnswers() as $indexAnswer => $answer): ?>
                     <div class="d-flex gap-3">
-                        <input class="form-check-input" type="<?= count($question->getRightAnswers()) == 1 ? 'radio' : 'checkbox' ?>" id="answer<?= $indexQuestion + 1 ?>.<?= $indexAnswer + 1 ?>" name="<?= $indexQuestion . '[]' ?>" value="<?= $indexAnswer ?>">
-                        <label class="form-check-label" for="answer<?= $indexQuestion + 1 ?>.<?= $indexAnswer + 1 ?>"><?= $answer->getTitle() ?></label>
+                        <input class="form-check-input" type="<?= count($question->getRightAnswers()) == 1 ? 'radio' : 'checkbox' ?>" id="answer<?= $indexQuestion + 1 ?>.<?= $indexAnswer + 1 ?>" <?= in_array($answer, $question->getSelectedAnswers()) ? 'checked' : '' ?> disabled>
+                        <label class="form-check-label <?= in_array($answer, $question->getRightAnswers()) ? 'text-success' : (in_array($answer, $question->getSelectedAnswers()) ? 'text-danger' : '') ?>" for="answer<?= $indexQuestion + 1 ?>.<?= $indexAnswer + 1 ?>"><?= $answer->getTitle() ?></label>
                     </div>
                     <?php endforeach; ?>
                 </div>
             </div>
             <?php endforeach; ?>
-            <button type="submit" class="btn btn-primary w-100">Répondre</button>
-        </form>
+            <a href="/" class="btn btn-primary w-100">Recommencer</a>
+        </section>
+
+        <div class="mt-3 alert <?= $this->getGrade() >= count($this->getQuestions()) / 2 ? 'alert-success' : 'alert alert-danger' ?>">
+            <p class="mb-0 text-center">Note : <?= $this->getGrade() ?> / <?= count($this->getQuestions()) ?></p>
+        </div> 
 
     </div>
 
